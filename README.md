@@ -1,5 +1,8 @@
 # vaadin-jetty-guice
 
+[![](https://img.shields.io/vaadin-directory/version/embedded-jetty--guice-example)](https://vaadin.com/directory/component/embedded-jetty--guice-example)
+[![](https://img.shields.io/vaadin-directory/star/embedded-jetty--guice-example)](https://vaadin.com/directory/component/embedded-jetty--guice-example)
+
 This is an example of a Vaadin 23 servlet running in an embedded Jetty server with Guice as a dependency injection framework.
 
 Check out my [Vaadin addons](https://vaadin.com/directory/?q=author%3AOliver_Yasuna).

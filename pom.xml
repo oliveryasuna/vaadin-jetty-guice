@@ -9,7 +9,7 @@
   ==== Core
   ==================================================-->
 
-  <groupId>com.oliveryasuna.example</groupId>
+  <groupId>org.vaadin.addons</groupId>
   <artifactId>vaadin-jetty-guice</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
@@ -163,6 +163,63 @@
     </plugins>
   </build>
 
+  <reporting/>
+
+  <!--==================================================
+  ==== Details
+  ==================================================-->
+
+  <name>Embedded Jetty + Guice Example</name>
+  <description>An example of a Vaadin 23 servlet running in an embedded Jetty server with Guice as a dependency injection framework.</description>
+  <url>https://github.com/oliveryasuna/vaadin-jetty-guice</url>
+  <inceptionYear>2022</inceptionYear>
+  <licenses>
+    <license>
+      <name>BSD 3-Clause</name>
+      <url>https://opensource.org/licenses/BSD-3-Clause</url>
+      <comments>Copyright 2023 Oliver Yasuna</comments>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>Oliver Yasuna</name>
+    <url>https://oliveryasuna.github.io/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>oliver-yasuna</id>
+
+      <name>Oliver Yasuna</name>
+      <url>https://oliveryasuna.github.io/</url>
+
+      <timezone>America/New_York</timezone>
+    </developer>
+  </developers>
+  <contributors/>
+
+  <!--==================================================
+  ==== Environment
+  ==================================================-->
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/oliveryasuna/vaadin-jetty-guice/issues</url>
+  </issueManagement>
+  <ciManagement/>
+
+  <mailingLists/>
+
+  <scm>
+    <url>https://github.com/oliveryasuna/vaadin-jetty-guice</url>
+    <connection>scm:git:git://github.com/oliveryasuna/vaadin-jetty-guice.git</connection>
+    <developerConnection>scm:git:git://github.com/oliveryasuna/vaadin-jetty-guice.git</developerConnection>
+  </scm>
+
+  <repositories/>
+  <pluginRepositories/>
+
+  <distributionManagement/>
+
   <profiles>
     <profile>
       <id>production</id>
@@ -198,6 +255,97 @@
 
                 <goals>
                   <goal>build-frontend</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>vaadin-directory</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+
+            <configuration>
+              <archive>
+                <index>true</index>
+
+                <manifest>
+                  <addClasspath>false</addClasspath>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                </manifest>
+                <manifestEntries>
+                  <Vaadin-Package-Version>1</Vaadin-Package-Version>
+                </manifestEntries>
+              </archive>
+
+              <excludes>
+                <exclude>META-INF/VAADIN/config/flow-build.info.json</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
+
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+
+                <phase>verify</phase>
+
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.3.0</version>
+
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+
+                <phase>verify</phase>
+
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.3.0</version>
+
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>${project.basedir}/src/assembly/assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+
+            <executions>
+              <execution>
+                <phase>install</phase>
+
+                <goals>
+                  <goal>single</goal>
                 </goals>
               </execution>
             </executions>
