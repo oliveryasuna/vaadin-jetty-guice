@@ -9,7 +9,7 @@
   ==== Core
   ==================================================-->
 
-  <groupId>org.vaadin.addons</groupId>
+  <groupId>org.vaadin.addons.oliveryasuna</groupId>
   <artifactId>vaadin-jetty-guice</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
