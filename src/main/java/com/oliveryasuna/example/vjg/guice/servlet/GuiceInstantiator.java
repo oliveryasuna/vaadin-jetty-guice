@@ -1,10 +1,8 @@
 package com.oliveryasuna.example.vjg.guice.servlet;
 
-import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.di.Instantiator;
 import com.vaadin.flow.i18n.I18NProvider;
-import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 
 import java.util.stream.Stream;
@@ -14,44 +12,33 @@ final class GuiceInstantiator implements Instantiator {
   // Constructors
   //--------------------------------------------------
 
-  public GuiceInstantiator(final Injector injector) {
+  public GuiceInstantiator(final GuiceVaadinServletService service) {
     super();
 
-    if(injector == null) throw new IllegalArgumentException("Injector must not be null.");
+    if(service == null) throw new IllegalArgumentException("Injector must not be null.");
 
-    this.injector = injector;
+    this.service = service;
   }
 
   // Fields
   //--------------------------------------------------
 
-  private final Injector injector;
-
-  private GuiceVaadinServlet servlet;
+  private final GuiceVaadinServletService service;
 
   // Methods
   //--------------------------------------------------
 
   @Override
-  public boolean init(final VaadinService service) {
-    if(!(service instanceof final GuiceVaadinServletService guiceService)) {
-      return false;
-    }
-
-    servlet = guiceService.getServlet();
-
-    return true;
-  }
-
-  @Override
   public Stream<VaadinServiceInitListener> getServiceInitListeners() {
+    final GuiceVaadinServlet servlet = service.getServlet();
+
     return servlet.getVaadinServiceInitListenerClasses().stream()
-        .map(injector::getInstance);
+        .map(servlet.getInjector()::getInstance);
   }
 
   @Override
   public <T> T getOrCreate(final Class<T> type) {
-    return servlet.getInjector().getInstance(type);
+    return service.getServlet().getInjector().getInstance(type);
   }
 
   @Override
@@ -61,7 +48,7 @@ final class GuiceInstantiator implements Instantiator {
 
   @Override
   public I18NProvider getI18NProvider() {
-    final Class<? extends I18NProvider> i18nProviderClass = servlet.getI18NProviderClass();
+    final Class<? extends I18NProvider> i18nProviderClass = service.getServlet().getI18NProviderClass();
 
     if(i18nProviderClass == null) {
       return null;

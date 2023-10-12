@@ -9,9 +9,9 @@ import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.server.ServiceException;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.server.VaadinServlet;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

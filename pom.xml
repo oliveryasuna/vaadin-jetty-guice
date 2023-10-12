@@ -11,7 +11,7 @@
 
   <groupId>org.vaadin.addons.oliveryasuna</groupId>
   <artifactId>vaadin-jetty-guice</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <packaging>jar</packaging>
 
   <modules/>
@@ -23,7 +23,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <vaadin.version>23.3.12</vaadin.version>
+    <vaadin.version>24.1.12</vaadin.version>
+    <jetty.version>12.0.2</jetty.version>
   </properties>
 
   <dependencyManagement>
@@ -40,7 +41,16 @@
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-bom</artifactId>
-        <version>9.4.51.v20230217</version>
+        <version>${jetty.version}</version>
+
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.jetty.ee10</groupId>
+        <artifactId>jetty-ee10-bom</artifactId>
+        <version>${jetty.version}</version>
 
         <type>pom</type>
         <scope>import</scope>
@@ -72,18 +82,13 @@
     =========================-->
 
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
+      <groupId>org.eclipse.jetty.ee10</groupId>
+      <artifactId>jetty-ee10-webapp</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-continuation</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-annotations</artifactId>
+      <groupId>org.eclipse.jetty.ee10.websocket</groupId>
+      <artifactId>jetty-ee10-websocket-jakarta-server</artifactId>
     </dependency>
 
     <!--=========================
@@ -116,9 +121,9 @@
     =========================-->
 
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
     </dependency>
 
     <dependency>
@@ -152,6 +157,10 @@
         <artifactId>vaadin-maven-plugin</artifactId>
         <version>${vaadin.version}</version>
 
+        <configuration>
+          <frontendHotdeploy>true</frontendHotdeploy>
+        </configuration>
+
         <executions>
           <execution>
             <goals>
@@ -170,7 +179,7 @@
   ==================================================-->
 
   <name>Embedded Jetty + Guice Example</name>
-  <description>An example of a Vaadin 23 servlet running in an embedded Jetty server with Guice as a dependency injection framework.</description>
+  <description>An example of a Vaadin 24 servlet running in an embedded Jetty server with Guice as a dependency injection framework.</description>
   <url>https://github.com/oliveryasuna/vaadin-jetty-guice</url>
   <inceptionYear>2022</inceptionYear>
   <licenses>
@@ -224,10 +233,6 @@
     <profile>
       <id>production</id>
 
-      <properties>
-        <vaadin.productionMode>true</vaadin.productionMode>
-      </properties>
-
       <dependencies>
         <dependency>
           <groupId>com.vaadin</groupId>
@@ -248,6 +253,10 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
             <version>${vaadin.version}</version>
+
+            <configuration>
+              <forceProductionBuild>true</forceProductionBuild>
+            </configuration>
 
             <executions>
               <execution>

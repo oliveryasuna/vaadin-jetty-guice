@@ -3,13 +3,14 @@ package com.oliveryasuna.example.vjg.jetty;
 import com.oliveryasuna.example.vjg.Application;
 import com.oliveryasuna.example.vjg.guice.servlet.GuiceVaadinServlet;
 import com.vaadin.flow.server.startup.ServletContextListeners;
-import org.eclipse.jetty.annotations.AnnotationConfiguration;
-import org.eclipse.jetty.plus.webapp.EnvConfiguration;
-import org.eclipse.jetty.plus.webapp.PlusConfiguration;
+import org.eclipse.jetty.ee10.annotations.AnnotationConfiguration;
+import org.eclipse.jetty.ee10.plus.webapp.EnvConfiguration;
+import org.eclipse.jetty.ee10.plus.webapp.PlusConfiguration;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.ee10.webapp.*;
+import org.eclipse.jetty.ee10.websocket.jakarta.server.config.JakartaWebSocketConfiguration;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.webapp.*;
+import org.eclipse.jetty.util.resource.ResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +65,9 @@ public final class JettyServer implements Runnable {
   private WebAppContext createWebAppContext() {
     final WebAppContext context = new WebAppContext();
 
-    context.setBaseResource(Resource.newResource(Application.class.getResource("/webapp")));
+    final ResourceFactory resourceFactory = ResourceFactory.of(context);
+
+    context.setBaseResource(resourceFactory.newResource(Application.class.getResource("/webapp")));
     context.setContextPath(contextPath);
     context.setExtractWAR(false);
 
@@ -76,15 +79,16 @@ public final class JettyServer implements Runnable {
     context.setConfigurationDiscovered(true);
     context.setConfigurations(new Configuration[] {
         new AnnotationConfiguration(),
+        new WebAppConfiguration(),
         new WebInfConfiguration(),
         new WebXmlConfiguration(),
         new MetaInfConfiguration(),
         new FragmentConfiguration(),
         new EnvConfiguration(),
         new PlusConfiguration(),
-        new JettyWebXmlConfiguration()
+        new JettyWebXmlConfiguration(),
+        new JakartaWebSocketConfiguration()
     });
-    context.getServletContext().setExtendedListenerTypes(true);
     context.addEventListener(new ServletContextListeners());
 
     return context;

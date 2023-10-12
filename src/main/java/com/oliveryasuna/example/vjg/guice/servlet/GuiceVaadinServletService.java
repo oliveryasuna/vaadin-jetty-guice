@@ -21,11 +21,7 @@ public class GuiceVaadinServletService extends VaadinServletService {
 
   @Override
   protected Optional<Instantiator> loadInstantiators() throws ServiceException {
-    final GuiceInstantiator instantiator = new GuiceInstantiator(getServlet().getInjector());
-
-    instantiator.init(this);
-
-    return Optional.of(instantiator);
+    return Optional.of(new GuiceInstantiator(this));
   }
 
   @Override
